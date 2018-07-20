@@ -9,11 +9,13 @@ pthread_mutex_t mutex_b;
 
 void *another(void *arg)
 {
+    sleep(5);
     pthread_mutex_lock(&mutex_b);
     printf("in child thread, got mutex b, waiting for mutex a\n");
-    sleep(5);
+    // sleep(5);
     ++b;
     pthread_mutex_lock(&mutex_a);
+    printf("in child thread, got mutex a, waiting for completion\n");
     b += a++;
     pthread_mutex_unlock(&mutex_a);
     pthread_mutex_unlock(&mutex_b);
@@ -30,9 +32,10 @@ int main()
 
     pthread_mutex_lock(&mutex_a);
     printf("in parent thread, got mutex a, waiting for mutex b\n");
-    sleep(5);
+    // sleep(5);
     ++a;
     pthread_mutex_lock(&mutex_b);
+    printf("in parent thread, got mutex b, waiting for completion\n");
     a += b++;
     pthread_mutex_unlock(&mutex_b);
     pthread_mutex_unlock(&mutex_a);
